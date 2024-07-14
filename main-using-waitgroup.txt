@@ -1,0 +1,44 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func main() {
+
+	// Start a goroutine to count "sheep"
+	// go count("sheep")
+
+	// // Start a goroutine to count "fish"
+	// go count("fish")
+
+	// fmt.Scanln()
+
+	// if we set go for all those 2 command above --> the program will go to next command which is nothing to do next, so
+	// the program will exit and there is no time left for running those 2 commands!
+	// so, to have time for them, we often set timeout, or one more command like "fmt.Scanln()"
+	// Purpose of fmt.Scanln():
+	// fmt.Scanln() waits for the user to input something and press Enter.
+	// This halts the main goroutine's execution, keeping the program running and allowing the two counting goroutines to continue executing.
+	// Without fmt.Scanln(), the main goroutine would reach the end of the main function and exit immediately, terminating all running goroutines prematurely.
+	// or using sync package...
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		count("sheep")
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
+func count(thing string) {
+	for i := 1; i <= 5; i++ {
+		fmt.Println(i, thing)
+		time.Sleep(time.Millisecond * 500)
+	}
+}
